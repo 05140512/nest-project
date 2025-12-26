@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('cat')
-export class Cat {
+@Entity('dogs')
+export class Dog {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,6 +16,9 @@ export class Cat {
 
   @Column()
   age: number;
+
+  @Column({ length: 255 })
+  description: string;
 
   @Column({ default: true })
   isActive: boolean;

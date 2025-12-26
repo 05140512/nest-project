@@ -1,44 +1,55 @@
 import {
   Controller,
-  Get,
   Post,
+  Get,
   Body,
   Param,
+  Patch,
   Delete,
-  ParseIntPipe,
-  Query,
 } from '@nestjs/common';
 import { CatService } from './cat.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { QueryCatDto } from './dto/query-cat.dto';
 
 @Controller('cat')
 export class CatController {
   constructor(private readonly catService: CatService) {}
 
   @Post('create')
-  create(@Body() createCatDto: CreateCatDto): boolean {
-    return this.catService.create(createCatDto);
+  async create(@Body() dto: CreateCatDto) {
+    const data = await this.catService.create(dto);
+    return {
+      success: true,
+      data,
+    };
   }
 
-  @Post('update')
-  update(@Body() updateCatDto: UpdateCatDto) {
-    return this.catService.update(updateCatDto.id, updateCatDto);
-  }
-
-  @Get()
-  findAll(@Query() query: QueryCatDto) {
-    return this.catService.findAll(query);
+  @Get('list')
+  async list() {
+    return {
+      success: true,
+      data: await this.catService.findAll(),
+    };
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.catService.findOne(+id);
+  async detail(@Param('id') id: number) {
+    return {
+      success: true,
+      data: await this.catService.findOne(id),
+    };
+  }
+  @Patch('update/:id')
+  async update(@Param('id') id: number, @Body() dto: UpdateCatDto) {
+    return {
+      success: await this.catService.update(id, dto),
+    };
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.catService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return {
+      success: await this.catService.remove(id),
+    };
   }
 }

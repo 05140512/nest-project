@@ -1,6 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateCatDto } from './create-cat.dto';
 
-export class UpdateCatDto extends PartialType(CreateCatDto) {
-  id: number;
-}
+export class UpdateCatDto extends PartialType(CreateCatDto) {}
