@@ -41,9 +41,10 @@ export class OrderService {
 
     try {
       // Generate order number if not provided
-      const orderNo =
-        createOrderDto.orderNo ||
-        `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`;
+      // 创建订单怎么会有默认的No?肯定是有约定的规则自动生成No的
+      // 比如：ORD202512260001，或者其他现有商用方案
+      // 这里使用Date.now()作为订单编号的一部分，可以保证订单编号的唯一性
+      const orderNo = `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
       // Calculate total amount
       let totalAmount = 0;
@@ -93,6 +94,9 @@ export class OrderService {
         orderItems,
       });
 
+      // 如果订单创建成功，应该返回订单信息
+      // 如果订单创建失败，应该回滚事务，并返回错误信息 怎么处理？怎么回滚事务？
+
       const savedOrder = await queryRunner.manager.save(Order, order);
 
       // Save order items
@@ -104,14 +108,26 @@ export class OrderService {
       await queryRunner.commitTransaction();
 
       // Return order with relations
-      return await this.orderRepository.findOne({
+      const orderWithRelations = await this.orderRepository.findOne({
         where: { id: savedOrder.id },
         relations: ['user', 'orderItems', 'orderItems.product'],
       });
+
+      if (!orderWithRelations) {
+        throw new NotFoundException('订单不存在');
+      }
+
+      return orderWithRelations;
     } catch (error) {
+      // 如果订单创建失败，应该回滚事务，并返回错误信息
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
+      // release 释放事务
+      // 如果事务没有提交，应该回滚事务，并返回错误信息
+      // 如果事务已经提交，应该释放事务
+      // 如果事务已经回滚，应该释放事务
+      // 如果事务已经提交，应该释放事务
       await queryRunner.release();
     }
   }
@@ -217,4 +233,3 @@ export class OrderService {
     return true;
   }
 }
-

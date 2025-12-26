@@ -25,4 +25,3 @@ export class CreatePetDto {
   @IsBoolean()
   isActive?: boolean;
 }
-

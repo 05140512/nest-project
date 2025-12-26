@@ -46,4 +46,3 @@ export class OrderItem {
   @Column()
   productId: number;
 }
-

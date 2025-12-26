@@ -46,4 +46,3 @@ export class Pet {
   @Column()
   familyId: number;
 }
-
