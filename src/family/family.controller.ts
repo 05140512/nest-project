@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FamilyService } from './family.service';
 import { CreateFamilyDto } from './dto/create-family.dto';
@@ -25,18 +26,46 @@ export class FamilyController {
     return this.familyService.findAll();
   }
 
+  @Get('with-users')
+  findAllWithUsers() {
+    return this.familyService.findAllFamiliesWithUsers();
+  }
+
+  @Get('by-user/:userId')
+  findByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    return this.familyService.findFamiliesByUserId(userId);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.familyService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.familyService.findOne(id);
+  }
+
+  @Get(':id/with-user')
+  findOneWithUser(@Param('id', ParseIntPipe) id: number) {
+    return this.familyService.findFamilyWithUser(id);
+  }
+
+  @Get(':id/with-pets')
+  findOneWithPets(@Param('id', ParseIntPipe) id: number) {
+    return this.familyService.findFamilyWithPets(id);
+  }
+
+  @Get(':id/with-user-pets')
+  findOneWithUserAndPets(@Param('id', ParseIntPipe) id: number) {
+    return this.familyService.findFamilyWithUserAndPets(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFamilyDto: UpdateFamilyDto) {
-    return this.familyService.update(+id, updateFamilyDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateFamilyDto: UpdateFamilyDto,
+  ) {
+    return this.familyService.update(id, updateFamilyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.familyService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.familyService.remove(id);
   }
 }

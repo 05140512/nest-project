@@ -34,4 +34,4 @@ async function bootstrap() {
   // 启动端口
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+void bootstrap();

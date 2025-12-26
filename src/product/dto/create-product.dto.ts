@@ -1,6 +1,6 @@
-import { IsString, IsOptional, IsNumber, IsBoolean } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 
-export class CreateFamilyDto {
+export class CreateProductDto {
   @IsString()
   name: string;
 
@@ -8,14 +8,18 @@ export class CreateFamilyDto {
   @IsString()
   description?: string;
 
+  @IsNumber()
+  price: number;
+
+  @IsNumber()
+  stock: number;
+
   @IsOptional()
   @IsString()
   image?: string;
-
-  @IsNumber()
-  userId: number;
 
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
 }
+

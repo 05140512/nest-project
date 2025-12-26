@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { CatModule } from './cat/cat.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DogsModule } from './dogs/dogs.module';
+import { PetModule } from './pet/pet.module';
+import { OrderModule } from './order/order.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { DogsModule } from './dogs/dogs.module';
     UsersModule,
     CatModule,
     DogsModule,
+    PetModule,
+    OrderModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
